@@ -1,36 +1,29 @@
 .form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .label {
-    font-weight: bold;
-  }
-  
-  .input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .errorMessage {
-    color: red;
-    font-size: 12px;
-  }
-  
-  .submitButton {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .submitButton:hover {
-    background-color: #45a049;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  color: #555;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+.button {
+  padding: 8px 12px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #45a049;
+}
