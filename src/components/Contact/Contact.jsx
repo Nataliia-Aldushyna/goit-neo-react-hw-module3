@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import styles from './Contact.module.css';
 
 const Contact = ({ id, name, number, onDelete }) => (
