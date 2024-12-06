@@ -1,53 +1,80 @@
 .contactList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  justify-content: center;
-  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 20px; 
+  padding: 10px;
 }
 
 .contactItem {
   display: flex;
   align-items: center;
-  gap: 10px;
   padding: 15px;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
 }
 
 .contactItem:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: scale(1.02);
+}
+
+.avatar {
+  flex-shrink: 0;
+  margin-right: 15px;
+}
+
+.avatarIcon {
+  font-size: 40px;
+  color: #6c757d;
 }
 
 .contactInfo {
-  flex: 1;
+  flex-grow: 1;
 }
 
 .name {
-  font-weight: 600;
   font-size: 18px;
-  color: #333;
+  font-weight: bold;
+  margin: 0;
+}
+
+.numberWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.phoneIcon {
+  font-size: 16px;
+  color: #28a745;
 }
 
 .number {
+  margin: 0;
   font-size: 16px;
-  color: #555;
 }
 
 .button {
-  padding: 10px 15px;
-  font-size: 14px;
-  color: white;
   background-color: #dc3545;
+  color: white;
   border: none;
+  padding: 8px 15px;
   border-radius: 5px;
+  font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s;
+  margin-left: 20px; 
 }
 
 .button:hover {
-  background-color: #b02a37;
+  background-color: #c82333;
+}
+
+.noContacts {
+  grid-column: span 2;
+  text-align: center;
+  font-size: 18px;
+  color: #6c757d;
 }

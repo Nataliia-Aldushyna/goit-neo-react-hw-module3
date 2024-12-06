@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import ContactForm from './components/ContactForm/ContactForm';
 import SearchBox from './components/SearchBox/SearchBox';
 import ContactList from './components/ContactList/ContactList';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import styles from './App.module.css';
 
 const App = () => {
@@ -18,14 +20,21 @@ const App = () => {
 
   const addContact = (newContact) => {
     if (contacts.some(contact => contact.name.toLowerCase() === newContact.name.toLowerCase())) {
-      alert(`${newContact.name} is already in contacts!`);
+      toast.error(`${newContact.name} is already in contacts!`);
       return;
     }
     setContacts([...contacts, newContact]);
+    toast.success(`Contact ${newContact.name} added successfully!`);
   };
 
   const deleteContact = (id) => {
-    setContacts(contacts.filter(contact => contact.id !== id));
+    const deletedContact = contacts.find(contact => contact.id === id);
+    if (deletedContact) {
+      setContacts(contacts.filter(contact => contact.id !== id));
+      toast.success(`Contact ${deletedContact.name} deleted successfully!`);
+    } else {
+      toast.error("Contact not found!");
+    }
   };
 
   const handleFilterChange = (event) => {
@@ -43,6 +52,7 @@ const App = () => {
       <h2 className={styles.subtitle}>Find contacts by name</h2>
       <SearchBox value={filter} onChange={handleFilterChange} />
       <ContactList contacts={filteredContacts} onDelete={deleteContact} />
+      <ToastContainer />
     </div>
   );
 };

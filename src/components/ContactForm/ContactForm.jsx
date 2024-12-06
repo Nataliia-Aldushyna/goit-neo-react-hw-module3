@@ -30,12 +30,22 @@ const ContactForm = ({ onSubmit }) => {
         <Form className={styles.form}>
           <label className={styles.label}>
             Name
-            <Field name="name" type="text" className={styles.input} />
+            <Field
+              name="name"
+              type="text"
+              placeholder="Enter contact name"
+              className={styles.input}
+            />
             <ErrorMessage name="name" component="div" className={styles.error} />
           </label>
           <label className={styles.label}>
             Number
-            <Field name="number" type="tel" className={styles.input} />
+            <Field
+              name="number"
+              type="tel"
+              placeholder="Enter contact number"
+              className={styles.input}
+            />
             <ErrorMessage name="number" component="div" className={styles.error} />
           </label>
           <button type="submit" className={styles.button}>
