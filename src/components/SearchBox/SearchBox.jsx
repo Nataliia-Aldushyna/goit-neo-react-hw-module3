@@ -1,13 +1,15 @@
-import styles from './SearchBox.module.css';
+import styles from "./SearchBox.module.css";
 
 const SearchBox = ({ value, onChange }) => (
-  <input
-    type="text"
-    placeholder="Find contacts by name"
-    value={value}
-    onChange={onChange}
-    className={styles.input}
-  />
+  <label className={styles.label}>
+    Find contacts by name
+    <input
+      type="text"
+      value={value}
+      onChange={onChange}
+      className={styles.input}
+    />
+  </label>
 );
 
 export default SearchBox;

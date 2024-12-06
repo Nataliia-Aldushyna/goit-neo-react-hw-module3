@@ -1,52 +1,49 @@
-import { useState, useEffect } from 'react';
-import ContactForm from './components/ContactForm/ContactForm';
-import ContactList from './components/ContactList/ContactList';
-import SearchBox from './components/SearchBox/SearchBox';
-import contactsData from '../contacts.json';
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { nanoid } from "nanoid";
+import styles from "./ContactForm.module.css";
 
-const App = () => {
-  const [contacts, setContacts] = useState(() => {
-    const savedContacts = localStorage.getItem('contacts');
-    return savedContacts ? JSON.parse(savedContacts) : contactsData;
+const ContactForm = ({ onSubmit }) => {
+  const validationSchema = Yup.object({
+    name: Yup.string().min(3).max(50).required("Name is required"),
+    number: Yup.string()
+      .matches(/^\d{3}-\d{2}-\d{2}$/, "Number must match the format 123-45-67")
+      .required("Number is required"),
   });
 
-  const [filter, setFilter] = useState('');
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
-
-  const addContact = (newContact) => {
-    if (contacts.some((contact) => contact.name.toLowerCase() === newContact.name.toLowerCase())) {
-      alert(`${newContact.name} is already in contacts!`);
-      return;
-    }
-    setContacts((prevContacts) => [newContact, ...prevContacts]);
-  };
-
-  const deleteContact = (id) => {
-    setContacts((prevContacts) => prevContacts.filter((contact) => contact.id !== id));
-  };
-
-  const getFilteredContacts = () => {
-    return contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(filter.toLowerCase())
-    );
-  };
-
-  const handleFilterChange = (e) => {
-    setFilter(e.target.value);
+  const handleSubmit = (values, { resetForm }) => {
+    const newContact = { ...values, id: nanoid() };
+    onSubmit(newContact);
+    resetForm();
   };
 
   return (
-    <div>
-      <h1>Phonebook</h1>
-      <ContactForm onSubmit={addContact} />
-      <h2>Contacts</h2>
-      <SearchBox value={filter} onChange={handleFilterChange} />
-      <ContactList contacts={getFilteredContacts()} onDeleteContact={deleteContact} />
-    </div>
+    <Formik
+      initialValues={{ name: "", number: "" }}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      <Form className={styles.form}>
+        <label className={styles.label}>
+          Name
+          <Field name="name" type="text" className={styles.input} />
+          <ErrorMessage name="name" component="div" className={styles.error} />
+        </label>
+        <label className={styles.label}>
+          Number
+          <Field name="number" type="text" className={styles.input} />
+          <ErrorMessage
+            name="number"
+            component="div"
+            className={styles.error}
+          />
+        </label>
+        <button type="submit" className={styles.button}>
+          Add contact
+        </button>
+      </Form>
+    </Formik>
   );
 };
 
-export default App;
+export default ContactForm;
