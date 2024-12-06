@@ -1,19 +1,25 @@
-import styles from "./ContactList.module.css";
+import styles from './ContactList.module.css';
 
-const ContactList = ({ contacts, onDelete }) => (
-  <ul className={styles.list}>
-    {contacts.map(({ id, name, number }) => (
-      <li key={id} className={styles.item}>
-        <div className={styles.info}>
-          <span className={styles.name}>{name}</span>
-          <span className={styles.number}>{number}</span>
+const ContactList = ({ contacts, onDelete }) => {
+  return (
+    <div className={styles.contactList}>
+      {contacts.map(({ id, name, number }) => (
+        <div key={id} className={styles.contactItem}>
+          <div className={styles.contactInfo}>
+            <p className={styles.name}>{name}</p>
+            <p className={styles.number}>{number}</p>
+          </div>
+          <button
+            type="button"
+            className={styles.button}
+            onClick={() => onDelete(id)}
+          >
+            Delete
+          </button>
         </div>
-        <button onClick={() => onDelete(id)} className={styles.button}>
-          Delete
-        </button>
-      </li>
-    ))}
-  </ul>
-);
+      ))}
+    </div>
+  );
+};
 
 export default ContactList;

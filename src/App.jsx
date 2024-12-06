@@ -1,49 +1,50 @@
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import { nanoid } from "nanoid";
-import styles from "./ContactForm.module.css";
+import { useState, useEffect } from 'react';
+import ContactForm from './components/ContactForm/ContactForm';
+import SearchBox from './components/SearchBox/SearchBox';
+import ContactList from './components/ContactList/ContactList';
+import styles from './App.module.css';
 
-const ContactForm = ({ onSubmit }) => {
-  const validationSchema = Yup.object({
-    name: Yup.string().min(3).max(50).required("Name is required"),
-    number: Yup.string()
-      .matches(/^\d{3}-\d{2}-\d{2}$/, "Number must match the format 123-45-67")
-      .required("Number is required"),
+const App = () => {
+  const [contacts, setContacts] = useState(() => {
+    const savedContacts = localStorage.getItem('contacts');
+    return savedContacts ? JSON.parse(savedContacts) : [];
   });
 
-  const handleSubmit = (values, { resetForm }) => {
-    const newContact = { ...values, id: nanoid() };
-    onSubmit(newContact);
-    resetForm();
+  const [filter, setFilter] = useState('');
+
+  useEffect(() => {
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
+
+  const addContact = (newContact) => {
+    if (contacts.some(contact => contact.name.toLowerCase() === newContact.name.toLowerCase())) {
+      alert(`${newContact.name} is already in contacts!`);
+      return;
+    }
+    setContacts([...contacts, newContact]);
   };
 
+  const deleteContact = (id) => {
+    setContacts(contacts.filter(contact => contact.id !== id));
+  };
+
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
+
+  const filteredContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
+
   return (
-    <Formik
-      initialValues={{ name: "", number: "" }}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      <Form className={styles.form}>
-        <label className={styles.label}>
-          Name
-          <Field name="name" type="text" className={styles.input} />
-          <ErrorMessage name="name" component="div" className={styles.error} />
-        </label>
-        <label className={styles.label}>
-          Number
-          <Field name="number" type="text" className={styles.input} />
-          <ErrorMessage
-            name="number"
-            component="div"
-            className={styles.error}
-          />
-        </label>
-        <button type="submit" className={styles.button}>
-          Add contact
-        </button>
-      </Form>
-    </Formik>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Phonebook</h1>
+      <ContactForm onSubmit={addContact} />
+      <h2 className={styles.subtitle}>Find contacts by name</h2>
+      <SearchBox value={filter} onChange={handleFilterChange} />
+      <ContactList contacts={filteredContacts} onDelete={deleteContact} />
+    </div>
   );
 };
 
-export default ContactForm;
+export default App;

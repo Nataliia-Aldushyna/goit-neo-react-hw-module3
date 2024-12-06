@@ -1,70 +1,44 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import { nanoid } from "nanoid";
-import styles from "./ContactForm.module.css";
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import { nanoid } from 'nanoid';
+import styles from './ContactForm.module.css';
+
+const validationSchema = Yup.object({
+  name: Yup.string()
+    .min(3, 'Minimum 3 characters')
+    .max(50, 'Maximum 50 characters')
+    .required('Required'),
+  number: Yup.string()
+    .min(7, 'Minimum 7 characters')
+    .max(15, 'Maximum 15 characters')
+    .required('Required'),
+});
 
 const ContactForm = ({ onSubmit }) => {
-  const validationSchema = Yup.object({
-    name: Yup.string()
-      .min(3, "Name must be at least 3 characters")
-      .max(50, "Name cannot exceed 50 characters")
-      .required("Name is required"),
-    number: Yup.string()
-      .min(7, "Number must be at least 7 characters")
-      .max(15, "Number cannot exceed 15 characters")
-      .required("Number is required"),
-  });
+  const handleSubmit = (values, { resetForm }) => {
+    onSubmit({ id: nanoid(), ...values });
+    resetForm();
+  };
 
   return (
     <Formik
-      initialValues={{ name: "", number: "" }}
+      initialValues={{ name: '', number: '' }}
       validationSchema={validationSchema}
-      onSubmit={(values, { resetForm }) => {
-        const newContact = {
-          id: nanoid(),
-          ...values,
-        };
-        onSubmit(newContact);
-        resetForm();
-      }}
+      onSubmit={handleSubmit}
     >
-      {({ isSubmitting }) => (
+      {() => (
         <Form className={styles.form}>
           <label className={styles.label}>
             Name
-            <Field
-              type="text"
-              name="name"
-              className={styles.input}
-              placeholder="Enter name"
-            />
-            <ErrorMessage
-              name="name"
-              component="div"
-              className={styles.error}
-            />
+            <Field name="name" type="text" className={styles.input} />
+            <ErrorMessage name="name" component="div" className={styles.error} />
           </label>
-
           <label className={styles.label}>
             Number
-            <Field
-              type="tel"
-              name="number"
-              className={styles.input}
-              placeholder="Enter number"
-            />
-            <ErrorMessage
-              name="number"
-              component="div"
-              className={styles.error}
-            />
+            <Field name="number" type="tel" className={styles.input} />
+            <ErrorMessage name="number" component="div" className={styles.error} />
           </label>
-
-          <button
-            type="submit"
-            className={styles.button}
-            disabled={isSubmitting}
-          >
+          <button type="submit" className={styles.button}>
             Add contact
           </button>
         </Form>
