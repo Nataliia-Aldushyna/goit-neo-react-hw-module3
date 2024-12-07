@@ -1,28 +1,32 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { nanoid } from 'nanoid';
-import styles from './ContactForm.module.css';
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { nanoid } from "nanoid";
+import styles from "./ContactForm.module.css";
 
-const validationSchema = Yup.object({
-  name: Yup.string()
-    .min(3, 'Minimum 3 characters')
-    .max(50, 'Maximum 50 characters')
-    .required('Required'),
-  number: Yup.string()
-    .min(7, 'Minimum 7 characters')
-    .max(15, 'Maximum 15 characters')
-    .required('Required'),
-});
+const ContactForm = ({ onAddContact }) => {
+  const validationSchema = Yup.object({
+    name: Yup.string()
+      .required("Name is required")
+      .min(3, "Name must be at least 3 characters")
+      .max(50, "Name must be at most 50 characters"),
+    number: Yup.string()
+      .required("Number is required")
+      .matches(/^\d{3}-\d{2}-\d{2}$/, "Number must match format: 123-45-67"),
+  });
 
-const ContactForm = ({ onSubmit }) => {
   const handleSubmit = (values, { resetForm }) => {
-    onSubmit({ id: nanoid(), ...values });
+    const newContact = {
+      id: nanoid(),
+      name: values.name,
+      number: values.number,
+    };
+    onAddContact(newContact);
     resetForm();
   };
 
   return (
     <Formik
-      initialValues={{ name: '', number: '' }}
+      initialValues={{ name: "", number: "" }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
@@ -30,26 +34,20 @@ const ContactForm = ({ onSubmit }) => {
         <Form className={styles.form}>
           <label className={styles.label}>
             Name
-            <Field
-              name="name"
-              type="text"
-              placeholder="Enter contact name"
-              className={styles.input}
-            />
+            <Field name="name" placeholder="Enter name" className={styles.input} />
             <ErrorMessage name="name" component="div" className={styles.error} />
           </label>
           <label className={styles.label}>
             Number
             <Field
               name="number"
-              type="tel"
-              placeholder="Enter contact number"
+              placeholder="Enter number (e.g. 123-45-67)"
               className={styles.input}
             />
             <ErrorMessage name="number" component="div" className={styles.error} />
           </label>
           <button type="submit" className={styles.button}>
-            Add contact
+            Add Contact
           </button>
         </Form>
       )}

@@ -1,13 +1,17 @@
-import styles from './SearchBox.module.css';
+import styles from "./SearchBox.module.css";
 
-const SearchBox = ({ value, onChange }) => {
+const SearchBox = ({ filter, onFilterChange }) => {
   return (
     <div className={styles.searchBox}>
+      <label htmlFor="search" className={styles.label}>
+        Find contacts by name
+      </label>
       <input
+        id="search"
         type="text"
-        value={value}
-        onChange={onChange}
-        placeholder="Search contacts..."
+        value={filter}
+        onChange={onFilterChange}
+        placeholder="Enter name"
         className={styles.input}
       />
     </div>
